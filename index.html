@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Webpage Design</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="complaint-style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+    <div class="main"><br><br><br>
+        
+            <header>
+                
+            <div class="logo">
+                <!--<img src="logo.png" width=300 height=100>-->
+            </div>
+            <div class="menu">
+                <h2>Municipal Department Govt of Andhra pradesh</h2>
+                <ul>
+                    <li><a href="#About">About</a></li>
+                    <li><a href="#SafetyPrecations">Safety Precations</a></li>
+                    <li><a href="#LocalData">Local Data</a></li>
+                    <li><a href="#Feedback">Feedback</a></li>
+                    <li><a href="#Contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="search">
+                <input class="srch" type="search" name="" placeholder="Type To text">
+                <a href="#"> <button class="btn">Search</button></a>
+            </div>
+            <ul>
+                <div id="google_translate_element"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                {pageLanguage: 'en'},
+                'google_translate_element'
+            );
+        }
+    </script>
+
+    <script type="text/javascript" 
+            src=
+"https://translate.google.com/translate_a/element.js?
+cb=googleTranslateElementInit">
+    </script>
+            </ul>
+            </header>
+
+            
+        <div class="content">
+            <div class="img">
+                <img src="C:\Users\lhars\OneDrive\Documents\Minor Project - 1\Minor Web\qr-code.png" width=100 height=100>
+            </div><br>
+            <button class="cn"><a href="http://trial-0.s3-website.eu-north-1.amazonaws.com">Scan QR</a></button><br><br><br>
+            <h1>Actions for escalating the complaint</h1>
+          <li>Step 1 :- Go to the complaint portal.</li>
+          <li>Step 2 :- Fill out the complaint form.</li>
+          <li>Step 3 :- Attach any relevant evidence files.</li>
+          <li>Step 4 :- Review the details carefully.</li>
+          <li>Step 5 :- Submit the complaint and save confirmation.</li><bR>
+            <button class="bn" id="openComplaintModal">Click here to open complaint portal...</a></button>
+                <div class="form">
+                    <h2>CDMA Login</h2>
+                    <input type="email" name="email" placeholder="Enter Email Here">
+                    <input type="password" name="" placeholder="Enter Password Here">
+                    <button class="btnn"><a href="#">Login</a></button>
+                    <p class="link">Don't have an account<br>
+                    <a href="#">Sign up </a> here</a></p>
+                    <div class="icons">
+                        <a href="https://www.facebook.com/MunicipalDepartment/"><ion-icon name="logo-facebook"></ion-icon></a>
+                        <a href="https://www.instagram.com/cdma_andhrapradesh/"><ion-icon name="logo-instagram"></ion-icon></a>
+                        <a href="https://x.com/i/flow/login?redirect_after_login=%2FCDMA_Municipal"><ion-icon name="logo-twitter"></ion-icon></a>
+                        <a href="https://cdma.ap.gov.in/en/anantapur"><ion-icon name="logo-google"></ion-icon></a>
+                        <a href="#"><ion-icon name="logo-skype"></ion-icon></a>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <!-- Complaint Modal Structure -->
+    <div id="complaintModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1>Complaint Form</h1>
+            <form action="complaint.php" method="POST" name="submit-to-google-sheet" onsubmit="return validateLocation()">
+                <!-- Location Section -->
+                <div class="form-group">
+                    <button type="button" onclick="getLocation()">Get Location</button>
+                    <label for="latitude">Latitude:</label>
+                    <input type="text" id="latitude" name="latitude" readonly required>
+                    <label for="longitude">Longitude:</label>
+                    <input type="text" id="longitude" name="longitude" readonly required>
+                </div>
+                <!-- Complaint Section -->
+                <div class="form-group">
+                    <label for="complaint">Complaint:</label>
+                    <select id="complaint" name="complaint" required>
+                        <option value="" disabled selected>Select Complaint</option>
+                        <option value="Strong odor">Strong odor</option>
+                        <option value="Bin Overflowing">Bin Overflowing</option>
+                        <option value="Lid broke">Lid broke</option>
+                        <option value="Too full">Too full</option>
+                    </select>
+                </div>
+                <!-- Bin Number Section -->
+                <div class="form-group">
+                    <label for="bin_number">Bin Number:</label>
+                    <input type="text" id="bin_number" name="bin_number" required>
+                </div>
+                <!-- Date Section -->
+                <div class="form-group">
+                    <label for="complaint_date">Date:</label>
+                    <input type="date" id="complaint_date" name="complaint_date" required>
+                </div>
+                <!-- Time Section -->
+                <div class="form-group">
+                    <label for="complaint_time">Time:</label>
+                    <input type="time" id="complaint_time" name="complaint_time" required>
+                </div>
+                <!-- Submit Button -->
+                <div class="form-group submit-button">
+                    <button type="submit">Submit Complaint</button>
+                </div>
+                <span id="Success"></span>
+            </form>
+
+            <script>
+                const scriptURL = 'https://script.google.com/macros/s/AKfycbybPAVDxdgjXj5jf11iIOQovJBPvadnOWIxPoH6f_AQmJaRT3jolsAXUdQNQ3db8tobPg/exec'
+                const form = document.forms['submit-to-google-sheet']
+                const Success = document.getElementById('Success');
+                form.addEventListener('submit', e => {
+                  e.preventDefault()
+                  fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                    .then(response => {
+                        Success.innerHTML ="Your Complaint Successfully Recorded........";
+
+                        setTimeout(function(){
+                            Success.innerHTML ="";
+                        },1000)
+                        form.reset();
+                    })
+                    .catch(error => console.error('Error!', error.message))
+                })
+              </script>
+
+        </div>
+    </div>
+    
+    <script>
+        // JavaScript to set the current time automatically
+        window.onload = function() {
+            const currentDate = new Date();
+            const currentTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('complaint_time').value = currentTime;
+            
+            const currentDateFormatted = currentDate.toISOString().split('T')[0];
+            document.getElementById('complaint_date').value = currentDateFormatted;
+        };
+    </script>
+    
+            </form>
+        </div>
+    </div>
+
+    <script src="java.js"></script>
+
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+
+
+
+    <!-- ________________________
+About
+_______________________ -->
+
+
+
+
+<section id="About">
+    <div class="content-section">
+        <div class="content-container">
+            <div class="content-left">
+                <div class="content-box">
+                    <h2>Location</h2>
+                    <p>Anantapuramu town is the Headquarters of the district. Its geographical co-ordinates are LAT 14º 68’ N and LONG 77º 60’ E.
+                        There are no zones/and 50 election wards in this Corporation.
+                    </p>
+                </div>
+                <div class="content-box"><br><br><br><br><br>
+                    <h2>Eco-Friendly Practices</h2>
+                    <p>Eco-friendly waste management is a way to dispose of waste without harming the environment. Some eco-friendly waste management methods include 
+                        Recycling, Composting, Vermicomposting, Waste separation, Reusing.
+                    </p>
+                </div>
+            </div>
+            <div class="content-center">
+                <img src="5.png" alt="Commissioner and Director of Municipal Administration">
+                <!-- Optional: Add image carousel code here -->
+            </div>
+            <div class="content-right">
+                <div class="content-box">
+                    <h2>Environmental Issues</h2>
+                    <p>Improper waste management can cause a number of environmental issues, including
+                        Air pollution, Water pollution, Soil contamination, Hazardous waste, Ecosystem damage, Climate change, Wildlife death, Mosquito breeding.
+                    </p>
+                </div>
+                <div class="content-box">
+                    <h2>Urban population</h2>
+                    <p>Out of the population of 263898 population of the town, 74964 are living notified, non-notified slums and poor areas.  Majority of them are leading their life as daily wage labourers, under employed labourers, seasonal labourers etc. At present there are 64poor settlements in the town, out of which 43are notified and 21non notified slums.
+                        Their participation in Government programmes like Janmma Bhoomi Programme, Clean & Green, Family Planning , Adult Education etc is immensely good,  in fact they are the back bones to any kind of programme of the Government.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    
+
+
+
+<!-- _____________________________
+SafetyPrecations
+_____________________________ -->
+
+
+<section id="SafetyPrecations">
+<div class="content1">
+    <h1>Essential Safety Precautions in Waste Management</h1>
+    <p>Ensuring safety through proper waste handling, segregation, and hygiene practices.</p>
+    </div>
+    <div class="content">
+    <div class="precaution-container">
+        <div class="precaution-item">
+            <img src="S1.png" alt="Personal Protective Equipment" class="precaution-image">
+            <div class="precaution-info">
+                <h3>Use of Personal Protective Equipment (PPE)</h3>
+                <p>Always wear gloves, masks, goggles, and protective clothing to prevent exposure to hazardous materials.</p>
+            </div>
+        </div>
+        <div class="precaution-item">
+            <img src="S2.jpeg" alt="Health and Hygiene Practices" class="precaution-image">
+            <div class="precaution-info">
+                <h3>Health and Hygiene Practices</h3>
+                <p>Regularly wash hands, use hand sanitizers, and maintain personal hygiene to prevent the spread of contaminants.</p>
+            </div>
+        </div>
+        <div class="precaution-item">
+            <img src="S3.jpeg" alt="Safe Waste Storage and Disposal" class="precaution-image">
+            <div class="precaution-info">
+                <h3>Safe Waste Storage and Disposal</h3>
+                <p>Properly store and dispose of waste in designated containers and facilities to ensure safe handling and environmental protection.</p>
+            </div>
+        </div>
+    </div>
+    <div class="precaution-container">
+        <div class="precaution-item">
+            <img src="S4.jpg" alt="Transportation Safety" class="precaution-image">
+            <div class="precaution-info">
+                <h3>Transportation Safety</h3>
+                <p>Ensure proper loading and securing of waste during transportation to prevent accidents and spills.</p>
+            </div>
+        </div>
+        <div class="precaution-item">
+            <img src="S5.jpeg" alt="Proper Waste Segregation" class="precaution-image">
+            <div class="precaution-info">
+                <h3>Proper Waste Segregation</h3>
+                <p>Classify and separate waste into appropriate categories to facilitate recycling and safe disposal.</p>
+            </div>
+        </div>
+        <div class="precaution-item">
+            <img src="S6.webp" alt="Safe Handling Procedures" class="precaution-image">
+            <div class="precaution-info">
+                <h3>Safe Handling Procedures</h3>
+                <p>Follow proper procedures to handle waste safely, including avoiding contact with hazardous materials and using appropriate equipment.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+    
+<!-- ____________________________
+LocalData
+____________________________ -->
+
+
+<section id="LocalData">
+<!-- Bin Locations -->
+<div class="local-section">
+    <h3>Local Bin Locations</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Zone</th>
+                <th>Bin Number</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Zone 1 -->
+            <tr>
+                <td>Zone 1</td>
+                <td>
+                    <select name="dropdown" class="full-width-dropdown" onchange="updateLocation(this, 'zone1Location', zone1Bins)">
+                        <option value="Select bin number" selected>Select bin number</option>
+                        <script>
+                            for (let i = 101; i <= 156; i++) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+                </td>
+                <td id="zone1Location">Select a bin</td>
+            </tr>
+
+            <!-- Zone 2 -->
+            <tr>
+                <td>Zone 2</td>
+                <td>
+                    <select name="dropdown" class="full-width-dropdown" onchange="updateLocation(this, 'zone2Location', zone2Bins)">
+                        <option value="Select bin number" selected>Select bin number</option>
+                        <script>
+                            for (let i = 201; i <= 263; i++) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+                </td>
+                <td id="zone2Location">Select a bin</td>
+            </tr>
+
+            <!-- Zone 3 -->
+            <tr>
+                <td>Zone 3</td>
+                <td>
+                    <select name="dropdown" class="full-width-dropdown" onchange="updateLocation(this, 'zone3Location', zone3Bins)">
+                        <option value="Select bin number" selected>Select bin number</option>
+                        <script>
+                            for (let i = 301; i <= 352; i++) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+                </td>
+                <td id="zone3Location">Select a bin</td>
+            </tr>
+
+            <!-- Zone 4 -->
+            <tr>
+                <td>Zone 4</td>
+                <td>
+                    <select name="dropdown" class="full-width-dropdown" onchange="updateLocation(this, 'zone4Location', zone4Bins)">
+                        <option value="Select bin number" selected>Select bin number</option>
+                        <script>
+                            for (let i = 401; i <= 493; i++) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+                </td>
+                <td id="zone4Location">Select a bin</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Add CSS for dropdown width -->
+<style>
+    .full-width-dropdown {
+        width: 100%;
+    }
+</style>
+
+
+
+
+    <!-- Waste Collection Schedules -->
+    <div class="local-section">
+        <h3>Waste Collection Schedules</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Zone</th>
+                    <th>Collection Day</th>
+                    <th>Areas</th>
+                    <th>No.of Bins</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Zone 1</td>
+                    <td>Monday, Wednesday</td>
+                    <td>Railway Station,
+                        Old Town,
+                        Reddy Palem,
+                        Market Area (Sankey Tank, Supermarket),
+                        Ananthapuram Temple </td>
+                        <td>56</td>
+                </tr>
+                <tr>
+                    <td>Zone 2</td>
+                    <td>Tuesday, Thursday</td>
+                    <td>Sri Sathya Sai University,
+                        Ameerpet,
+                        Balaji Nagar,
+                        Kamalanagar,
+                        Sathya Sai Hospital</td>
+                        <td>63</td>
+                </tr>
+                <tr>
+                    <td>Zone 3</td>
+                    <td>Friday, Saturday</td>
+                    <td>Anantapur District Collectorate,
+                        Bandi Bazar,
+                        Malkapuram,
+                        Housing Board Colony,
+                        Government Quarters</td>
+                        <td>52</td>
+                </tr>
+                <tr>
+                    <td>Zone 4</td>
+                    <td>Friday, Saturday</td>
+                    <td>Industrial Areas (e.g., Peddapalli),
+                        Nallamada,
+                        New Residential Developments,
+                        Rural Outskirts,
+                        Balaji Nagar</td>
+                        <td>93</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Divided Container for Left and Right Sections -->
+    <div class="local-data-container">
+        <!-- Left Side: Educational Information and Environmental Impact Reports -->
+        <div class="local-left">
+            <div class="local-section">
+                <h3>Educational Information</h3>
+                <p>Total Population: 340,613</p>
+                <p>Participants in Recycling Program: 50,000</p>
+                <p>Community Cleanup Events: 50</p>
+                <p>Recycling Rate: 30%</p>
+                <p>Awareness Campaigns Held: 5</p>
+                <p>School Program Participation: 40%</p>
+            </div>
+
+            <div class="local-section">
+                <h3>Environmental Impact Reports</h3>
+                <p>Air Quality Index (Previous Year): 120</p>
+                <p>Air Quality Index (Current Year): 150</p>
+                <p>Soil Pollution Level (Previous Year): Moderate</p>
+                <p>Soil Pollution Level (Current Year): Low</p>
+                <p>Water Contamination Level (Previous Year): Moderate</p>
+                <p>Water Contamination Level (Current Year): High</p>
+            </div>
+        </div>
+
+        <!-- Right Side: Waste Segregation Statistics and Water Consumption Data -->
+        <div class="local-right">
+            <div class="local-section">
+                <h3>Waste Segregation Statistics (September 2024)</h3>
+                <p>Total Waste Collected: 2,95,873 kg</p>
+                <p>Recycled Waste: 140,989 kg</p>
+                <p>Composted Waste: 81,389 kg</p>
+                <p>Landfill Waste: 73,495 kg</p>
+            </div>
+            <br>
+            <br>
+
+            <div class="local-section">
+                <h3>Water Consumption Data (September 2024)</h3>
+                <p>Total Water Used: 21.73 TMC ft </p>
+                <p>Residential Use: 13.5 TMC ft </p>
+                <p>Commercial Use: 8.23 TMC ft </p>
+            </div>
+        </div>
+    </div>
+
+    <p>Summary: Due to better waste management practices and community participation, the local environment has shown significant improvement in air and soil quality over the past year.</p>
+</section>
+
+
+<!-- ______________________
+feedback-form
+________________________ -->
+
+
+<section id="Feedback">
+    <div class="feedback-container">
+        <!-- Feedback Form -->
+        <div class="feedback-form">
+            <h2>Feedback</h2>
+        <form action="https://submit-form.com/GwcBTK8Z0">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Name" required="" /><br>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Email" required="" /><br>
+            <label for="message">Message</label>
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Message"
+              required=""
+            ></textarea>
+            <button type="submit">Send</button>
+          </form>
+        
+        </div>
+
+        <!-- Feedback Image -->
+        <div class="feedback-image">
+            <img src="6.png" alt="Feedback Image" height="300" width="250">
+        </div>
+    </div>
+</section>
+
+    <section id="Contact"> 
+        <h1>Contact Us</h1>
+
+        <p align = "center">Address: Ananthapuram, Andhra Pradesh - 515001</p>
+        <p align = "center">Phone Number = +91 9876543210</p>
+
+    </section>
+</body>
+</html>
+
+
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Clear Waste. All rights reserved.</p>
+</footer>
